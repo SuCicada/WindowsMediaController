@@ -1,0 +1,7 @@
+.cursor
+.idea
+bin
+logs
+obj
+build_output.txt
+/Folder.DotSettings.user

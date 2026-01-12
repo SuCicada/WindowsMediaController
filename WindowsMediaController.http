@@ -1,0 +1,6 @@
+@WindowsMediaController_HostAddress = http://localhost:5278
+
+GET {{WindowsMediaController_HostAddress}}/weatherforecast/
+Accept: application/json
+lo
+###
