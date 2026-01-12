@@ -47,6 +47,36 @@ public class MediaController : ControllerBase
             return StatusCode(500, ApiResponse<object?>.Fail(ex.Message));
         }
     }
+    [HttpPost("play")]
+    public async Task<ActionResult<ApiResponse<object?>>> Play()
+    {
+
+        var status = await _mediaService.GetStatusAsync();
+        if (!status.IsPlaying)
+        {
+            await _mediaService.PlayPauseAsync();
+            return Ok(ApiResponse<object?>.Ok(null, "Play signal sent"));
+        }
+        else
+        {
+            return Ok(ApiResponse<object?>.Ok(null, "Already playing"));
+        }
+
+    }
+    [HttpPost("pause")]
+    public async Task<ActionResult<ApiResponse<object?>>> Pause()
+    {
+        var status = await _mediaService.GetStatusAsync();
+        if (status.IsPlaying)
+        {
+            await _mediaService.PlayPauseAsync();
+            return Ok(ApiResponse<object?>.Ok(null, "Pause signal sent"));
+        }
+        else
+        {
+            return Ok(ApiResponse<object?>.Ok(null, "Already paused"));
+        }
+    }
 
     [HttpPost("stop")]
     public async Task<ActionResult<ApiResponse<object?>>> Stop()

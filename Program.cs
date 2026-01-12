@@ -30,6 +30,10 @@ SetAutoStart(autoStart);
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+// 配置路由为小写
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -41,7 +45,7 @@ builder.Services.AddSwaggerGen(options =>
         Contact = new Microsoft.OpenApi.Models.OpenApiContact
         {
             Name = "Windows Media Controller",
-            Url = new Uri("https://github.com/yourusername/WindowsMediaController")
+            Url = new Uri("https://github.com/SuCicada/WindowsMediaController")
         }
     });
     

@@ -17,10 +17,9 @@ public class VolumeService : IVolumeService, IDisposable
     private static readonly IntPtr HWND_BROADCAST = new IntPtr(0xFFFF);
 
   // Windows API 常量
-    private const int VK_VOLUME_MUTE = 0xAD;
-    private const int VK_VOLUME_DOWN = 0xAE;
-    private const int VK_VOLUME_UP = 0xAF;
-    private const uint KEYEVENTF_KEYUP = 0x0002;
+    private const byte VK_VOLUME_MUTE = 0xAD;
+    private const byte VK_VOLUME_DOWN = 0xAE;
+    private const byte VK_VOLUME_UP = 0xAF;
 
     public VolumeService()
     {
@@ -53,22 +52,22 @@ public class VolumeService : IVolumeService, IDisposable
         // 根据音量变化方向选择合适的命令
         // int command = (targetVolume > currentVolume) ? APPCOMMAND_VOLUME_UP : APPCOMMAND_VOLUME_DOWN;
         // TriggerVolumeOSD(command);
-        SimulateKeyPress(VK_VOLUME_UP);
-        SimulateKeyPress(VK_VOLUME_DOWN);
+        KeyboardHelper.SimulateKeyPress(VK_VOLUME_UP);
+        KeyboardHelper.SimulateKeyPress(VK_VOLUME_DOWN);
     }
 
     public void VolumeUp()
     {
         // float current = GetVolume();
         // SetVolume(current + 0.02f);
-        SimulateKeyPress(VK_VOLUME_UP);
+        KeyboardHelper.SimulateKeyPress(VK_VOLUME_UP);
     }
 
     public void VolumeDown()
     {
         // float current = GetVolume();
         // SetVolume(current - 0.02f);
-        SimulateKeyPress(VK_VOLUME_DOWN);
+        KeyboardHelper.SimulateKeyPress(VK_VOLUME_DOWN);
     }
 
     public void Mute()
@@ -76,7 +75,7 @@ public class VolumeService : IVolumeService, IDisposable
         // _defaultDevice.AudioEndpointVolume.Mute = true;
           if (!IsMuted())
         {
-            SimulateKeyPress(VK_VOLUME_MUTE);
+            KeyboardHelper.SimulateKeyPress(VK_VOLUME_MUTE);
         }
     }
 
@@ -85,7 +84,7 @@ public class VolumeService : IVolumeService, IDisposable
         // _defaultDevice.AudioEndpointVolume.Mute = false;
         if (IsMuted())
         {
-            SimulateKeyPress(VK_VOLUME_MUTE);
+            KeyboardHelper.SimulateKeyPress(VK_VOLUME_MUTE);
         }
     }
 
@@ -93,20 +92,6 @@ public class VolumeService : IVolumeService, IDisposable
     {
         return _defaultDevice.AudioEndpointVolume.Mute;
     }
-   /// <summary>
-    /// 模拟按键按下和释放，触发 Windows 系统音量UI显示
-    /// </summary>
-    private void SimulateKeyPress(int virtualKeyCode)
-    {
-        // 按下键
-        keybd_event((byte)virtualKeyCode, 0, 0, 0);
-        // 释放键
-        keybd_event((byte)virtualKeyCode, 0, KEYEVENTF_KEYUP, 0);
-    }
-
-    [DllImport("user32.dll")]
-    private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
-
 
     /// <summary>
     /// 触发 Windows 系统音量 OSD (On-Screen Display) 显示

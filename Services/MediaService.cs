@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices;
 using Windows.Media.Control;
 using WindowsMediaController.Models;
 
@@ -8,15 +7,10 @@ public class MediaService : IMediaService
 {
     private GlobalSystemMediaTransportControlsSessionManager? _smtcManager;
 
-    // keybd_event API for media control
-    [DllImport("user32.dll")]
-    private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, uint dwExtraInfo);
-
     private const byte VK_MEDIA_NEXT_TRACK = 0xB0;
     private const byte VK_MEDIA_PREV_TRACK = 0xB1;
     private const byte VK_MEDIA_STOP = 0xB2;
     private const byte VK_MEDIA_PLAY_PAUSE = 0xB3;
-    private const uint KEYEVENTF_KEYUP = 0x0002;
 
     public MediaService()
     {
@@ -36,25 +30,25 @@ public class MediaService : IMediaService
 
     public Task PlayPauseAsync()
     {
-        SendMediaKey(VK_MEDIA_PLAY_PAUSE);
+        KeyboardHelper.SimulateKeyPress(VK_MEDIA_PLAY_PAUSE);
         return Task.CompletedTask;
     }
 
     public Task StopAsync()
     {
-        SendMediaKey(VK_MEDIA_STOP);
+        KeyboardHelper.SimulateKeyPress(VK_MEDIA_STOP);
         return Task.CompletedTask;
     }
 
     public Task NextAsync()
     {
-        SendMediaKey(VK_MEDIA_NEXT_TRACK);
+        KeyboardHelper.SimulateKeyPress(VK_MEDIA_NEXT_TRACK);
         return Task.CompletedTask;
     }
 
     public Task PreviousAsync()
     {
-        SendMediaKey(VK_MEDIA_PREV_TRACK);
+        KeyboardHelper.SimulateKeyPress(VK_MEDIA_PREV_TRACK);
         return Task.CompletedTask;
     }
 
@@ -100,11 +94,5 @@ public class MediaService : IMediaService
         }
 
         return status;
-    }
-
-    private void SendMediaKey(byte key)
-    {
-        keybd_event(key, 0, 0, 0); // Key down
-        keybd_event(key, 0, KEYEVENTF_KEYUP, 0); // Key up
     }
 }
