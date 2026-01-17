@@ -68,7 +68,7 @@ builder.Services.AddSingleton<NotifyIconService>();
 int port = builder.Configuration.GetValue<int>("AppConfig:Port");
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenLocalhost(port);
+    options.ListenAnyIP(port);
 });
 
 var app = builder.Build();
@@ -94,11 +94,18 @@ app.MapControllers();
 
 // Start System Tray in a separate thread
 var notifyIconService = app.Services.GetRequiredService<NotifyIconService>();
-var thread = new Thread(() => notifyIconService.Initialize());
+var thread = new Thread(() => notifyIconService.Initialize())
+{
+    IsBackground = true, // 设置为后台线程，这样主程序退出时不会被阻塞
+    Name = "NotifyIconThread"
+};
 thread.SetApartmentState(ApartmentState.STA);
 thread.Start();
 
 app.Run();
+
+// 应用程序关闭时，确保清理托盘图标
+notifyIconService.Dispose();
 
 
 void SetAutoStart(bool enable)
