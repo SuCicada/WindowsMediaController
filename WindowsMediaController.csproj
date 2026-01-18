@@ -6,10 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWindowsForms>true</UseWindowsForms>
     <InvariantGlobalization>false</InvariantGlobalization>
-    
+    <OutputType>WinExe</OutputType>
+    <ApplicationIcon>Resources\tray.ico</ApplicationIcon>
+
     <!-- 发布配置 -->
     <PublishSingleFile>true</PublishSingleFile>
-    <SelfContained>false</SelfContained>
+    <SelfContained>true</SelfContained>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
@@ -23,7 +25,7 @@
     <PackageReference Include="NAudio" Version="2.2.1" />
   </ItemGroup>
 
-  <!-- 嵌入资源：系统托盘图标 -->
+  <!-- 嵌入资源：系统托盘图�?-->
   <ItemGroup>
     <EmbeddedResource Include="Resources\tray.ico" />
   </ItemGroup>
